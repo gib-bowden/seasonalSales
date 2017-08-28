@@ -1,0 +1,55 @@
+body {
+	background-color: #F1F0F0;
+
+}
+
+#main {
+	width: 80%;
+	margin: 5% auto auto auto;
+}
+
+#products-container {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	align-items: center;
+	margin: auto;
+/*	margin-top: 5%;
+	margin-bottom: auto;*/
+	height: 100%;
+}
+.card {
+	background-color: white ;
+	height: auto;
+	width: 100%;
+	box-shadow: 2px 2px grey;
+	margin: .2%;
+}
+
+.sale-item {
+	background-color: silver;
+	color: white;
+}
+
+
+
+h1, h2, h3 {
+	display: inline-block;
+	text-align: center;
+	width: 30%;
+	white-space: nowrap;
+
+}
+
+h1 {
+	text-align: left;
+	padding-left: 10px;
+}
+
+
+
+
+#select-area {
+	text-align: left;
+	margin-bottom: 1%;
+}
