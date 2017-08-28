@@ -16,6 +16,12 @@
 			"name": "Household",
 			"season_discount": "Spring",
 			"discount": 0.15
+		},
+		{
+			"id": 4,
+			"name": "",
+			"season_discount": "Summer",
+			"discount": 0.00
 		}
 	]
 }

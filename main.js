@@ -1,6 +1,10 @@
+//global variables
 var productsContainer = document.getElementById("products-container");
 var selectArea = document.getElementById("category-select");
+var combinedProductArr = [];
 
+
+//XHR
 var productsRequest = new XMLHttpRequest();
 	productsRequest.addEventListener("load", importProducts)
 	productsRequest.addEventListener("error", logFailedRequest)
@@ -14,6 +18,8 @@ var categoriesRequest = new XMLHttpRequest();
 	categoriesRequest.open("GET", "categories.json")
 	categoriesRequest.send();
 
+
+//XHR load functions
 function importProducts(){
 	productsData = JSON.parse(this.responseText);
 	products = productsData.products; 
@@ -25,7 +31,6 @@ function importCategories(){
 	createCombinedProductArr(); 
 	buildDropdownList(categories);
 	buildProductsList(combinedProductArr);
-
 }
 
 function logFailedRequest(){
@@ -33,12 +38,10 @@ function logFailedRequest(){
 }
 
 
-var combinedProductArr = []
+//Joins the products and categories arrays on category ID and builds a new array
 function createCombinedProductArr() {
-	var newObject = {}
-	var productCategory; 
 	for (let product of products) {
-		productCategory = product.category_id; 
+		var productCategory = product.category_id; 
 		for (let category of categories) {
 			if (category.id === productCategory) {
 				var newObject = {
@@ -52,7 +55,6 @@ function createCombinedProductArr() {
 				category_id: product.category_id,
 				category_name: category.name,
 				season: category.season_discount
-
 				}
 			}	
 		} 
@@ -61,26 +63,31 @@ function createCombinedProductArr() {
 	}
 }
 
-
-
+//Creates the product list in the DOM
 function buildProductsList(arr) {
 	var domString = ""
-	var price = 0; 
 	if (arr !== []) {
 		for (let [i, item] of arr.entries()) {
-			(item.season === selectArea.value) ? (price = item.discounted_price) : (price = item.price)
-			domString +=	`<div class="card category-id-${item.category_id}" id="card-${i}">
-								<h1>${item.name}</h1>
-								<h3 class="price">${price}</h3>
-								<h3>${item.category_name}</h3>
+			if (item.season === selectArea.value) {
+				var price = item.discounted_price;
+				var status = "sale-item"; 
+			} else {
+				var price = item.price;
+				var status = "regular-item"; 
+			}
+			domString +=	`<div class="card category-id-${item.category_id} ${status}" id="card-${i}">
+								<h1 class="product-name">${item.name}</h1>
+								<h3 class="product-price">${price}</h3>
+								<h3 class="product-category">${item.category_name}</h3>
 							</div>`;
 		} 
 		productsContainer.innerHTML = domString;
 	}
 }
 
+//Populates the dropdown options in the DOM
 function buildDropdownList(arr) {
-var domString = ""
+var domString = `<option disabled selected value> -- select a season -- </option>`
 	if (arr !== []) {
 		for (let item of arr) {
 			domString += `<option id="${item.id}" value="${item.season_discount}">${item.season_discount}</option>`
@@ -89,6 +96,7 @@ var domString = ""
 	}
 }
 
+//Event listener on the dropdown that rebilds the product list when the selected option is changed
 selectArea.addEventListener("change", function () {
 	buildProductsList(combinedProductArr);
-});
+	});
