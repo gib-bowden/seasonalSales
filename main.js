@@ -1,5 +1,6 @@
 //global variables
 var selectArea = document.getElementById("category-select");
+var products = [];
 
 
 //XHR
@@ -23,8 +24,7 @@ function importCategories(products) {
 		categoriesRequest.send();
 
 	function buildPage(){
-		categoriesData = JSON.parse(this.responseText);
-		categories = categoriesData.categories;
+	var	categories = JSON.parse(this.responseText).categories;
 		createCombinedProductArr(products, categories); 
 		buildDropdownList(categories);
 		buildProductsList(products);
@@ -32,11 +32,11 @@ function importCategories(products) {
 }
 
 function logFailedRequest(){
-	console.log("shit broke")
+	console.log("dis broke")
 }
 
 
-//Joins the products and categories arrays on category ID adds categories info ot each product
+//Joins the products and categories arrays on category ID adds categories info to each product
 function createCombinedProductArr(products, categories) {
 	for (let product of products) {
 		var productCategory = product.category_id; 
@@ -57,10 +57,11 @@ function buildProductsList(arr) {
 	var domString = ""
 	if (arr !== []) {
 		for (let [i, item] of arr.entries()) {
-			if (item.season === selectArea.value) {
+			if (item.category_id === Number(selectArea.value)) {
 				var price = item.discountedPrice;
 				var status = "sale-item"; 
-			} else {
+			} 
+			else {
 				var price = item.price;
 				var status = "regular-item"; 
 			}
@@ -79,7 +80,7 @@ function buildDropdownList(arr) {
 var domString = `<option disabled selected value> -- select a season -- </option>`
 	if (arr !== []) {
 		for (let item of arr) {
-			domString += `<option id="${item.id}" value="${item.season_discount}">${item.season_discount}</option>`
+			domString += `<option value="${item.id}">${item.season_discount}</option>`
 		} 
 		selectArea.innerHTML = domString;
 	}
